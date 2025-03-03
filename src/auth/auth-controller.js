@@ -68,7 +68,7 @@ const RequestOtp = (req, res) => {
         return Math.floor(100000 + Math.random() * 900000);
       }
       var otpNumber = otp();
-      var otpExpiry = new Date(Date.now() + 5 * 60 * 1000).toLocaleString();
+      var otpExpiry = new Date(Date.now() + 5 * 60 * 1000).toISOString();
       let OtpObj = { otpNumber, otpExpiry };
 
       let message = `<p style="color:black">Copy the One Time Password (OTP) below <br></p><h6 style="font-size:large; color:#016401;">${otpNumber}<h6/>`;
