@@ -52,7 +52,7 @@ async function PostFreeGames(req, res) {
 }
 
 const FetchFreeGames = (req, res) => {
-  fetch_free_games_model(code)
+  fetch_free_games_model()
     .then((response3) => {
       if (response3.error) {
         return res.send(responseObject(response3.error.message, false, null));
@@ -121,7 +121,7 @@ async function PostPremiumGames(req, res) {
 }
 
 const FetchPremiumGames = (req, res) => {
-  fetch_premium_games_model(code)
+  fetch_premium_games_model()
     .then((response3) => {
       if (response3.error) {
         return res.send(responseObject(response3.error.message, false, null));
