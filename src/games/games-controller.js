@@ -41,19 +41,7 @@ async function PostFreeGames(req, res) {
           return res.send(responseObject(response2.error.message, false, null));
         }
 
-        fetch_free_games_model(code).then((response3) => {
-          if (response3.error) {
-            return res.send(
-              responseObject(response3.error.message, false, null)
-            );
-          }
-
-          if (response3.data.length < 1) {
-            return res.send(responseObject("no game", false, null));
-          }
-
-          return res.send(responseObject("games posted", true, response3.data));
-        });
+        return res.send(responseObject("games posted", true, response2.data));
       })
       .catch((error) => {
         return res.send(error);
@@ -62,6 +50,24 @@ async function PostFreeGames(req, res) {
     return error;
   }
 }
+
+const FetchFreeGames = (req, res) => {
+  fetch_free_games_model(code)
+    .then((response3) => {
+      if (response3.error) {
+        return res.send(responseObject(response3.error.message, false, null));
+      }
+
+      if (response3.data.length < 1) {
+        return res.send(responseObject("no free game available", false, null));
+      }
+
+      return res.send(responseObject("games posted", true, response3.data));
+    })
+    .catch((error) => {
+      return res.send(error);
+    });
+};
 
 const DeleteFreeGames = (req, res) => {
   let { code } = req.body;
@@ -104,19 +110,7 @@ async function PostPremiumGames(req, res) {
           return res.send(responseObject(response2.error.message, false, null));
         }
 
-        fetch_premium_games_model(code).then((response3) => {
-          if (response3.error) {
-            return res.send(
-              responseObject(response3.error.message, false, null)
-            );
-          }
-
-          if (response3.data.length < 1) {
-            return res.send(responseObject("no game", false, null));
-          }
-
-          return res.send(responseObject("games posted", true, response3.data));
-        });
+        return res.send(responseObject("games posted", true, response2.data));
       })
       .catch((error) => {
         return res.send(error);
@@ -125,6 +119,24 @@ async function PostPremiumGames(req, res) {
     return error;
   }
 }
+
+const FetchPremiumGames = (req, res) => {
+  fetch_premium_games_model(code)
+    .then((response3) => {
+      if (response3.error) {
+        return res.send(responseObject(response3.error.message, false, null));
+      }
+
+      if (response3.data.length < 1) {
+        return res.send(responseObject("no game", false, null));
+      }
+
+      return res.send(responseObject("games posted", true, response3.data));
+    })
+    .catch((error) => {
+      return res.send(error);
+    });
+};
 
 const DeletePremiumGames = (req, res) => {
   let { code } = req.body;
@@ -143,4 +155,6 @@ module.exports = {
   PostPremiumGames,
   DeleteFreeGames,
   DeletePremiumGames,
+  FetchFreeGames,
+  FetchPremiumGames,
 };

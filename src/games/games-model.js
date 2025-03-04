@@ -15,8 +15,8 @@ function post_free_games_model(payload) {
     .select();
 }
 
-function fetch_free_games_model(payload) {
-  return supabase.from("free").select("*").eq("code", payload);
+function fetch_free_games_model() {
+  return supabase.from("free").select("*");
 }
 
 function delete_free_games_model(payload) {
@@ -38,8 +38,8 @@ function post_premium_games_model(payload) {
     .select();
 }
 
-function fetch_premium_games_model(payload) {
-  return supabase.from("premium").select("*").eq("code", payload);
+function fetch_premium_games_model() {
+  return supabase.from("premium").select("*");
 }
 
 function delete_premium_games_model(payload) {
