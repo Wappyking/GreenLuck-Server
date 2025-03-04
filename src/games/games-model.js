@@ -7,6 +7,9 @@ function post_free_games_model(payload) {
       {
         code: payload.code,
         games: payload.games,
+        totalOdds: payload.totalOdds,
+        bookie: payload.bookie,
+        numberOfGames: payload.numberOfGames,
       },
     ])
     .select();
@@ -27,6 +30,9 @@ function post_premium_games_model(payload) {
       {
         code: payload.code,
         games: payload.games,
+        totalOdds: payload.totalOdds,
+        bookie: payload.bookie,
+        numberOfGames: payload.numberOfGames,
       },
     ])
     .select();

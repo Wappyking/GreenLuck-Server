@@ -27,11 +27,14 @@ async function PostFreeGames(req, res) {
     );
     const result_1 = await response.text();
     let data = JSON.parse(result_1).data.lists;
+    let totalOdds = JSON.parse(result_1).data.home.odds;
+    let bookie = JSON.parse(result_1).data.home.bookie_name;
+    let numberOfGames = JSON.parse(result_1).data.home.no_of_entries;
 
     let games = data;
     console.log(games);
 
-    let payload = { code, games };
+    let payload = { code, games, totalOdds, bookie, numberOfGames };
     post_free_games_model(payload)
       .then((response2) => {
         if (response2.error) {
@@ -87,11 +90,14 @@ async function PostPremiumGames(req, res) {
     );
     const result_1 = await response.text();
     let data = JSON.parse(result_1).data.lists;
+    let totalOdds = JSON.parse(result_1).data.home.odds;
+    let bookie = JSON.parse(result_1).data.home.bookie_name;
+    let numberOfGames = JSON.parse(result_1).data.home.no_of_entries;
 
     let games = data;
     console.log(games);
 
-    let payload = { code, games };
+    let payload = { code, games, totalOdds, bookie, numberOfGames };
     post_premium_games_model(payload)
       .then((response2) => {
         if (response2.error) {
