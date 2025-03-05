@@ -17,6 +17,8 @@ const {
   fetch_free_gamesList_model,
   fetch_free_code_model,
   fetch_premium_code_model,
+  fetch_free_id_model,
+  fetch_premium_id_model,
 } = require("./games-model");
 
 async function PostFreeGames(req, res) {
@@ -268,6 +270,46 @@ const DeletePremiumGames = (req, res) => {
   });
 };
 
+const FetchFreeID = (req, res) => {
+  let { id } = req.body;
+
+  fetch_free_id_model(id).then((response) => {
+    if (response.error) {
+      return res.send(responseObject(response.error.message, false, null));
+    }
+
+    if (response.data.length < 1) {
+      return res.send(responseObject("games does not exist", false, null));
+    }
+
+    let data = response.data[0];
+
+    let code = data.code;
+
+    return res.send(responseObject("code retrieved", true, code));
+  });
+};
+
+const FetchPremiumID = (req, res) => {
+  let { id } = req.body;
+
+  fetch_premium_id_model(id).then((response) => {
+    if (response.error) {
+      return res.send(responseObject(response.error.message, false, null));
+    }
+
+    if (response.data.length < 1) {
+      return res.send(responseObject("games does not exist", false, null));
+    }
+
+    let data = response.data[0];
+
+    let code = data.code;
+
+    return res.send(responseObject("code retrieved", true, code));
+  });
+};
+
 module.exports = {
   PostFreeGames,
   PostPremiumGames,
@@ -277,4 +319,6 @@ module.exports = {
   FetchPremiumGames,
   FetchFreeGamesList,
   FetchPremiumGamesList,
+  FetchFreeID,
+  FetchPremiumID,
 };

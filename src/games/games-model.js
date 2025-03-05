@@ -34,6 +34,10 @@ function fetch_free_code_model(payload) {
   return supabase.from("free").select("*").eq("code", payload);
 }
 
+function fetch_free_id_model(payload) {
+  return supabase.from("free").select("*").eq("id", payload);
+}
+
 function fetch_free_gamesList_model(payload) {
   return supabase.from("free_games").select("*").eq("code", payload);
 }
@@ -80,6 +84,10 @@ function fetch_premium_code_model(payload) {
   return supabase.from("premium").select("*").eq("code", payload);
 }
 
+function fetch_premium_id_model(payload) {
+  return supabase.from("premium").select("*").eq("id", payload);
+}
+
 function fetch_premium_gamesList_model(payload) {
   return supabase.from("premium_games").select("*").eq("code", payload);
 }
@@ -107,4 +115,6 @@ module.exports = {
   delete_premium_gamesList_model,
   fetch_free_code_model,
   fetch_premium_code_model,
+  fetch_free_id_model,
+  fetch_premium_id_model,
 };
