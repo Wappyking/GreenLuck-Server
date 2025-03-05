@@ -3,6 +3,8 @@ const { response } = require("express");
 const {
   delete_public_user_model,
   delete_private_user_model,
+  fetch_user_public_model,
+  getUserByIdPrivate,
 } = require("../auth/auth-model");
 const {
   delete_notification_model,
@@ -66,6 +68,47 @@ const deleteUserFunction = (req, res) => {
     .catch((error) => {
       return res.send(responseObject(error));
     });
+};
+
+const FetchUserFunction = (req, res) => {
+  let { email } = req.body;
+
+  fetch_user_public_model(email).then((userPublicResponse) => {
+    if (userPublicResponse.error) {
+      return res.send(
+        responseObject(userPublicResponse.error.message, false, null)
+      );
+    }
+
+    if (userPublicResponse.data.length < 1) {
+      return res.send(responseObject("invalid user", false, null));
+    }
+
+    let userPublicData = userPublicResponse.data[0];
+    let uuid = userPublicData.uuid;
+    console.log(uuid);
+
+    // getUserByIdPrivate(uuid).then((userPrivateResponse) => {
+    //   if (userPrivateResponse.error) {
+    //     return res.send(
+    //       responseObject(
+    //         userPrivateResponse.error.message,
+    //         false,
+    //         userPublicData
+    //       )
+    //     );
+    //   }
+
+    //   if (userPrivateResponse.data.length < 1) {
+    //     return res.send(responseObject("invalid user", false, null));
+    //   }
+
+    //   let userPrivateData = userPrivateResponse.data[0];
+
+    // let data = { userPublicData, userPrivateData };
+    return res.send(responseObject("userData fetched", true, userPublicData));
+    // });
+  });
 };
 
 const photoUploadFunction = (req, res) => {
@@ -136,4 +179,5 @@ module.exports = {
   Get_logged_in_user_controller,
   deleteUserFunction,
   photoUploadFunction,
+  FetchUserFunction,
 };
