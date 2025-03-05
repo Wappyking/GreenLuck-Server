@@ -34,7 +34,7 @@ async function PostFreeGames(req, res) {
     let games = data;
     console.log(games);
 
-    let payload = { code, games, totalOdds, bookie, numberOfGames };
+    let payload = { code, games: games, totalOdds, bookie, numberOfGames };
     post_free_games_model(payload)
       .then((response2) => {
         if (response2.error) {
@@ -103,7 +103,7 @@ async function PostPremiumGames(req, res) {
     let games = data;
     console.log(games);
 
-    let payload = { code, games, totalOdds, bookie, numberOfGames };
+    let payload = { code, games: games, totalOdds, bookie, numberOfGames };
     post_premium_games_model(payload)
       .then((response2) => {
         if (response2.error) {
