@@ -10,6 +10,13 @@ const {
   fetch_premium_games_model,
   delete_free_games_model,
   delete_premium_games_model,
+  post_free_gamesList_model,
+  post_premium_gamesList_model,
+  delete_free_gamesList_model,
+  delete_premium_gamesList_model,
+  fetch_free_gamesList_model,
+  fetch_free_code_model,
+  fetch_premium_code_model,
 } = require("./games-model");
 
 async function PostFreeGames(req, res) {
@@ -31,21 +38,48 @@ async function PostFreeGames(req, res) {
     let bookie = JSON.parse(result_1).data.home.bookie_name;
     let numberOfGames = JSON.parse(result_1).data.home.no_of_entries;
 
-    let games = { games: data };
+    let games = data;
     console.log(games);
 
-    let payload = { code, games, totalOdds, bookie, numberOfGames };
-    post_free_games_model(payload)
-      .then((response2) => {
-        if (response2.error) {
-          return res.send(responseObject(response2.error.message, false, null));
-        }
+    fetch_free_code_model(code).then((fetchCodeResponse) => {
+      if (fetchCodeResponse.error) {
+        return res.send(
+          responseObject(fetchCodeResponse.error.message, false, null)
+        );
+      }
 
-        return res.send(responseObject("games posted", true, response2.data));
-      })
-      .catch((error) => {
-        return res.send(error);
-      });
+      if (fetchCodeResponse.data.length > 0) {
+        return res.send(responseObject("code already posted", false, null));
+      }
+
+      let payload = { code, games, totalOdds, bookie, numberOfGames };
+      post_free_games_model(payload)
+        .then((response2) => {
+          if (response2.error) {
+            return res.send(
+              responseObject(response2.error.message, false, null)
+            );
+          }
+          let payload = { code, games };
+          post_free_gamesList_model(payload).then((gamesListResponse) => {
+            if (gamesListResponse.error) {
+              return res.send(
+                responseObject(gamesListResponse.error.message, false, null)
+              );
+            }
+
+            return res.send(
+              responseObject("games posted", true, {
+                response2,
+                gamesListResponse,
+              })
+            );
+          });
+        })
+        .catch((error) => {
+          return res.send(error);
+        });
+    });
   } catch (error) {
     return error;
   }
@@ -69,6 +103,28 @@ const FetchFreeGames = (req, res) => {
     });
 };
 
+const FetchFreeGamesList = (req, res) => {
+  let { code } = req.body;
+
+  fetch_free_gamesList_model(code)
+    .then((response3) => {
+      if (response3.error) {
+        return res.send(responseObject(response3.error.message, false, null));
+      }
+
+      if (response3.data.length < 1) {
+        return res.send(responseObject("no free game available", false, null));
+      }
+
+      return res.send(
+        responseObject("gamesList fetched", true, response3.data)
+      );
+    })
+    .catch((error) => {
+      return res.send(error);
+    });
+};
+
 const DeleteFreeGames = (req, res) => {
   let { code } = req.body;
 
@@ -77,7 +133,13 @@ const DeleteFreeGames = (req, res) => {
       return res.send(responseObject(response.error.message, false, null));
     }
 
-    return res.send(responseObject("game deleted", true, response.data));
+    delete_free_gamesList_model(code).then((response2) => {
+      if (response2.error) {
+        return res.send(responseObject(response2.error.message, false, null));
+      }
+
+      return res.send(responseObject("gameList deleted", true, response2.data));
+    });
   });
 };
 
@@ -103,18 +165,46 @@ async function PostPremiumGames(req, res) {
     let games = { games: data };
     console.log(games);
 
-    let payload = { code, games, totalOdds, bookie, numberOfGames };
-    post_premium_games_model(payload)
-      .then((response2) => {
-        if (response2.error) {
-          return res.send(responseObject(response2.error.message, false, null));
-        }
+    fetch_premium_code_model(code).then((fetchCodeResponse) => {
+      if (fetchCodeResponse.error) {
+        return res.send(
+          responseObject(fetchCodeResponse.error.message, false, null)
+        );
+      }
 
-        return res.send(responseObject("games posted", true, response2.data));
-      })
-      .catch((error) => {
-        return res.send(error);
-      });
+      if (fetchCodeResponse.data.length > 0) {
+        return res.send(responseObject("code already posted", false, null));
+      }
+
+      let payload = { code, games, totalOdds, bookie, numberOfGames };
+      post_premium_games_model(payload)
+        .then((response2) => {
+          if (response2.error) {
+            return res.send(
+              responseObject(response2.error.message, false, null)
+            );
+          }
+
+          let payload = { code, games };
+          post_premium_gamesList_model(payload).then((gamesListResponse) => {
+            if (gamesListResponse.error) {
+              return res.send(
+                responseObject(gamesListResponse.error.message, false, null)
+              );
+            }
+
+            return res.send(
+              responseObject("games posted", true, {
+                response2,
+                gamesListResponse,
+              })
+            );
+          });
+        })
+        .catch((error) => {
+          return res.send(error);
+        });
+    });
   } catch (error) {
     return error;
   }
@@ -138,6 +228,28 @@ const FetchPremiumGames = (req, res) => {
     });
 };
 
+const FetchPremiumGamesList = (req, res) => {
+  let { code } = req.body;
+
+  fetch_premium_games_model(code)
+    .then((response3) => {
+      if (response3.error) {
+        return res.send(responseObject(response3.error.message, false, null));
+      }
+
+      if (response3.data.length < 1) {
+        return res.send(responseObject("no game", false, null));
+      }
+
+      return res.send(
+        responseObject("gamesList fetched", true, response3.data)
+      );
+    })
+    .catch((error) => {
+      return res.send(error);
+    });
+};
+
 const DeletePremiumGames = (req, res) => {
   let { code } = req.body;
 
@@ -146,7 +258,13 @@ const DeletePremiumGames = (req, res) => {
       return res.send(responseObject(response.error.message, false, null));
     }
 
-    return res.send(responseObject("game deleted", true, response.data));
+    delete_premium_gamesList_model(code).then((response2) => {
+      if (response2.error) {
+        return res.send(responseObject(response2.error.message, false, null));
+      }
+
+      return res.send(responseObject("game deleted", true, response2.data));
+    });
   });
 };
 
@@ -157,4 +275,6 @@ module.exports = {
   DeletePremiumGames,
   FetchFreeGames,
   FetchPremiumGames,
+  FetchFreeGamesList,
+  FetchPremiumGamesList,
 };
