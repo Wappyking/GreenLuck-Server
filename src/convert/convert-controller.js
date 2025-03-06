@@ -17,7 +17,7 @@ async function FetchSupportedBookies(req, res) {
     );
     const result_1 = await response.text();
     let data = JSON.parse(result_1).data.bookies;
-    let array = Object.keys(data);
+    let array = Object.values(data);
     return res.send(responseObject("bookies fetched", true, array));
   } catch (error) {
     return error;
