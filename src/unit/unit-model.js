@@ -1,7 +1,7 @@
 const supabase = require("../../config/supaconfig_index");
 
 function fetch_all_units_model() {
-  return supabase.from("plan").select("*");
+  return supabase.from("unit").select("*");
 }
 
 function fetch_unit_id_model(payload) {
