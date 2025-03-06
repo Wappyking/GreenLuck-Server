@@ -11,7 +11,7 @@ const FetchAllPlansFunction = (req, res) => {
       return res.send(responseObject("no plans available", false, null));
     }
 
-    return res.send(responseObject("plans fetched", true, response.data[0]));
+    return res.send(responseObject("plans fetched", true, response.data));
   });
 };
 
