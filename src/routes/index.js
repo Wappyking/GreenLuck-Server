@@ -6,5 +6,6 @@ routes.use("/auth", require("../auth/auth-routes"));
 routes.use("/user", require("../user/user-routes"));
 routes.use("/games", require("../games/games-routes"));
 routes.use("/plan", require("../plan/plan-routes"));
+routes.use("/unit", require("../unit/unit-routes"));
 
 module.exports = routes;
