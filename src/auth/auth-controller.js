@@ -36,7 +36,9 @@ const { sendEmail } = require("../utility/sendEmail");
 const RequestOtp = (req, res) => {
   let { email, userName } = req.body;
 
-  fetch_user_public_model(email).then((fetchEmailResponse) => {
+  let newEmail = email.toLowerCase();
+
+  fetch_user_public_model(newEmail).then((fetchEmailResponse) => {
     if (fetchEmailResponse.error) {
       return res.send(
         responseObject(fetchEmailResponse.error.message, false, null)
@@ -73,7 +75,12 @@ const RequestOtp = (req, res) => {
 
       let message = `<p style="color:black">Copy the One Time Password (OTP) below <br></p><h6 style="font-size:large; color:#016401;">${otpNumber}<h6/>`;
 
-      sendEmail(email, "One Time Password (OTP)", `Hello ${userName}`, message);
+      sendEmail(
+        newEmail,
+        "One Time Password (OTP)",
+        `Hello ${userName}`,
+        message
+      );
 
       return res.send(responseObject("Otp sent", true, OtpObj));
     });
@@ -83,9 +90,11 @@ const RequestOtp = (req, res) => {
 const LoginFunction = (req, res) => {
   let { email, password } = req.body;
 
+  let newEmail = email.toLowerCase();
+
   //feltching
 
-  fetch_user_public_model(email)
+  fetch_user_public_model(newEmail)
     .then((response) => {
       if (response.error) {
         return res.send(responseObject(response.error.message, false, null));
@@ -101,7 +110,7 @@ const LoginFunction = (req, res) => {
       return res.send(responseObject(error));
     });
 
-  login_model({ email, password })
+  login_model({ newEmail, password })
     .then((response) => {
       if (response.error) {
         return res.send(responseObject(response.error.message, false, null));
@@ -116,7 +125,9 @@ const LoginFunction = (req, res) => {
 const SignupFunction = (req, res) => {
   let { userName, email, phone, password } = req.body;
 
-  fetch_user_public_model(email).then((fetchEmailResponse) => {
+  let newEmail = email.toLowerCase();
+
+  fetch_user_public_model(newEmail).then((fetchEmailResponse) => {
     if (fetchEmailResponse.error) {
       return res.send(
         responseObject(fetchEmailResponse.error.message, false, null)
@@ -126,7 +137,7 @@ const SignupFunction = (req, res) => {
     if (fetchEmailResponse.data.length > 0) {
       return res.send(responseObject("User Already Registered", false, null));
     }
-    let payload = { email, password };
+    let payload = { newEmail, password };
 
     SignUp_private_model(payload)
       .then((SignUpPrivateResponse) => {
@@ -137,7 +148,7 @@ const SignupFunction = (req, res) => {
         }
         let uuid = SignUpPrivateResponse.data.user.id;
 
-        let payload = { userName, email, phone, uuid };
+        let payload = { userName, newEmail, phone, uuid };
 
         SignUp_public_model(payload)
           .then((SignUpPublicResponse) => {
@@ -167,7 +178,9 @@ const SignupFunction = (req, res) => {
 const ResetPasswordFunction = (req, res) => {
   let { email } = req.body;
 
-  ResetPasswordModel(email).then((resetPasswordResponse) => {
+  let newEmail = email.toLowerCase();
+
+  ResetPasswordModel(newEmail).then((resetPasswordResponse) => {
     if (resetPasswordResponse.error) {
       return res.send(
         responseObject(resetPasswordResponse.error.message, false, null)
@@ -183,17 +196,21 @@ const ResetPasswordFunction = (req, res) => {
 const UpdatePasswordFunction = (req, res) => {
   let { email, newPassword } = req.body;
 
-  UpdatePasswordModel({ email, newPassword }).then((UpdatePasswordResponse) => {
-    if (UpdatePasswordResponse.error) {
+  let newEmail = email.toLowerCase();
+
+  UpdatePasswordModel({ newEmail, newPassword }).then(
+    (UpdatePasswordResponse) => {
+      if (UpdatePasswordResponse.error) {
+        return res.send(
+          responseObject(UpdatePasswordResponse.error.message, false, null)
+        );
+      }
+
       return res.send(
-        responseObject(UpdatePasswordResponse.error.message, false, null)
+        responseObject("password Updated", true, UpdatePasswordResponse.data)
       );
     }
-
-    return res.send(
-      responseObject("password Updated", true, UpdatePasswordResponse.data)
-    );
-  });
+  );
 };
 
 module.exports = {

@@ -49,6 +49,14 @@ function uuid_update_public_model(email, uuid) {
     .select();
 }
 
+function unit_update_public_model(email, unit) {
+  return supabase
+    .from("user_public")
+    .update({ unit: unit })
+    .eq("email", email)
+    .select();
+}
+
 //getting user by id from public table
 function fetch_user_uuid_model(payload) {
   return supabase.from("user_public").select("*").eq("uuid", payload);
@@ -111,4 +119,5 @@ module.exports = {
   fetch_user_userName_model,
   ResetPasswordModel,
   UpdatePasswordModel,
+  unit_update_public_model,
 };

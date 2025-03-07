@@ -73,7 +73,9 @@ const deleteUserFunction = (req, res) => {
 const FetchUserFunction = (req, res) => {
   let { email } = req.body;
 
-  fetch_user_public_model(email).then((userPublicResponse) => {
+  let newEmail = email.toLowerCase();
+
+  fetch_user_public_model(newEmail).then((userPublicResponse) => {
     if (userPublicResponse.error) {
       return res.send(
         responseObject(userPublicResponse.error.message, false, null)
