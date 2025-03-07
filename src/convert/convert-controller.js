@@ -76,7 +76,7 @@ async function ConvertBetCode(req, res) {
         }
 
         let data = JSON.parse(result_1).data;
-        if (data == null) {
+        if (data == null || data.conversion == null) {
           return res.send(
             responseObject(
               "There was a problem converting your code",
