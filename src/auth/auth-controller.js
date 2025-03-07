@@ -115,7 +115,17 @@ const LoginFunction = (req, res) => {
       if (response.error) {
         return res.send(responseObject(response.error.message, false, null));
       }
-      res.send(responseObject("Login successful", true, response.data.user));
+
+      let email = newEmail;
+      let uuid = response.data.user.id;
+      let access_token = response.data.session.access_token;
+      let refresh_token = response.data.session.refresh_token;
+
+      let token = { access_token, refresh_token };
+      let userPublicData = { email, uuid };
+      let userPrivateData = response.data.user;
+      let data = { token, userPublicData, userPrivateData };
+      res.send(responseObject("Login successful", true, data));
     })
     .catch((error) => {
       return res.send(responseObject());
@@ -158,12 +168,17 @@ const SignupFunction = (req, res) => {
               );
             }
 
-            return res.send(
-              responseObject("SignUp successfull", true, {
-                SignUpPublicResponse,
-                SignUpPrivateResponse,
-              })
-            );
+            let userPublicData = SignUpPublicResponse;
+            let userPrivateData = SignUpPrivateResponse;
+            let access_token = SignUpPrivateResponse.data.session.access_token;
+            let refresh_token =
+              SignUpPrivateResponse.data.session.refresh_token;
+
+            let token = { access_token, refresh_token };
+
+            let data = { userPublicData, userPrivateData, token };
+
+            return res.send(responseObject("SignUp successfull", true, data));
           })
           .catch((error) => {
             return res.send(error);

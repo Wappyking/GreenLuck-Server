@@ -16,14 +16,17 @@ function SignUp_public_model(payload) {
 
 function SignUp_private_model(payload) {
   return supabase.auth.signUp({
-    email: payload.email,
+    email: payload.newEmail,
     password: payload.password,
     // options: { data: payload.data },
   });
 }
 
-function login_model({ email, password }) {
-  return supabase.auth.signInWithPassword({ email, password });
+function login_model({ newEmail, password }) {
+  return supabase.auth.signInWithPassword({
+    email: newEmail,
+    password: password,
+  });
 }
 
 function fetch_user_public_model(payload) {

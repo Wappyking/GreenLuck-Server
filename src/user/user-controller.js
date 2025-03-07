@@ -86,7 +86,7 @@ const FetchUserFunction = (req, res) => {
       return res.send(responseObject("invalid user", false, null));
     }
 
-    let userPublicData = userPublicResponse.data[0];
+    let userPublicData = { userPublicData: userPublicResponse.data[0] };
     let uuid = userPublicData.uuid;
     console.log(uuid);
 
