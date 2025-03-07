@@ -50,7 +50,7 @@ async function ConvertBetCode(req, res) {
       }
 
       if (userPublicResponse.data.length < 1) {
-        return res.send("invalid user", false, null);
+        return res.send(responseObject("invalid user", false, null));
       }
 
       let userPublicData = userPublicResponse.data[0];
