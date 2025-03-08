@@ -15,7 +15,7 @@ const FetchSlidersFunction = (req, res) => {
       return res.send(responseObject("no slider available", false, null));
     }
 
-    return res.send("sliders fetch", true, FetchResponse.data);
+    return res.send(responseObject("sliders fetch", true, FetchResponse.data));
   });
 };
 
