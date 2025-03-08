@@ -1,5 +1,9 @@
 const { responseObject } = require("../utility");
-const { fetch_slider_model, post_slider_model } = require("./slider-model");
+const {
+  fetch_slider_model,
+  post_slider_model,
+  delete_slider_model,
+} = require("./slider-model");
 
 const FetchSlidersFunction = (req, res) => {
   fetch_slider_model().then((FetchResponse) => {
@@ -24,8 +28,28 @@ const PostSliderFunction = (req, res) => {
       return res.send(responseObject(PostResponse.error.message, false, null));
     }
 
-    return res.send("slider posted", true, PostResponse.data);
+    return res.send(responseObject("slider posted", true, PostResponse.data));
   });
 };
 
-module.exports = { FetchSlidersFunction, PostSliderFunction };
+const DeleteSliderFunction = (req, res) => {
+  let { id } = req.body;
+
+  delete_slider_model(id).then((DeleteResponse) => {
+    if (DeleteResponse.error) {
+      return res.send(
+        responseObject(DeleteResponse.error.message, false, null)
+      );
+    }
+
+    return res.send(
+      responseObject("slider deleted", true, DeleteResponse.data)
+    );
+  });
+};
+
+module.exports = {
+  FetchSlidersFunction,
+  PostSliderFunction,
+  DeleteSliderFunction,
+};

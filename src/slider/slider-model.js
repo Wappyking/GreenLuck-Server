@@ -16,4 +16,8 @@ function fetch_slider_model() {
   return supabase.from("slider").select("*");
 }
 
-module.exports = { fetch_slider_model, post_slider_model };
+function delete_slider_model(payload) {
+  return supabase.from("slider").delete().eq("id", payload);
+}
+
+module.exports = { fetch_slider_model, post_slider_model, delete_slider_model };
