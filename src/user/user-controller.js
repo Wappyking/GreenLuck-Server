@@ -114,8 +114,41 @@ const FetchUserFunction = (req, res) => {
 };
 
 const ImageUploadFunction = (req, res) => {
-  const { fileName, formData } = req.body;
+  const { file } = req.body;
 
+  const fileType = response.assets[0].type;
+
+  let fieldName = fileType.startsWith("image") ? "image" : "video";
+
+  let fileExtention = fileType.split("/").pop();
+
+  let fileName = `GreenLuck${Math.random()}.${fileExtention}`;
+
+  let base64Image = response.assets[0].base64;
+
+  function base64ToBlob(base64data, contentType = fileType) {
+    const byteCharacters = atob(base64data);
+
+    //create an array with same length as byte character converting each character to it's unicode code
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+
+    //create array that can be used to construct a blob, 8-bit unsign integer
+    let byteArray = new Uint8Array(byteNumbers);
+
+    // create a new blob obsject from the byte array
+    return new Blob([byteArray], { type: contentType });
+  }
+
+  const blob = base64ToBlob(base64Image);
+
+  //create a form data object and append the blob to as a file to it
+  let formData = new FormData();
+  formData.append(fieldName, blob, fileName);
+
+  //upload
   let payload = { fileName, formData };
 
   InsertImageModel(payload)
