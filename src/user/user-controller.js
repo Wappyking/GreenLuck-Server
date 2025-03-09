@@ -116,7 +116,7 @@ const FetchUserFunction = (req, res) => {
 const ImageUploadFunction = (req, res) => {
   const { file } = req.body;
 
-  const fileType = response.assets[0].type;
+  const fileType = file.assets[0].type;
 
   let fieldName = fileType.startsWith("image") ? "image" : "video";
 
@@ -124,7 +124,7 @@ const ImageUploadFunction = (req, res) => {
 
   let fileName = `GreenLuck${Math.random()}.${fileExtention}`;
 
-  let base64Image = response.assets[0].base64;
+  let base64Image = file.assets[0].base64;
 
   function base64ToBlob(base64data, contentType = fileType) {
     const byteCharacters = atob(base64data);
