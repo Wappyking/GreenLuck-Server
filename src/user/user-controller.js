@@ -113,73 +113,96 @@ const FetchUserFunction = (req, res) => {
   });
 };
 
-const photoUploadFunction = (req, res) => {
-  if (!req.file) {
-    res.send(responseObject("no file upaloaded", false, null));
-  }
-  // extract buffer data
-  let bufferData = req.file.buffer;
+const ImageUploadFunction = (req, res) => {
+  const { fileName, formData } = req.body;
 
-  // conert buffer data to a base 64 encoded string
-  let base64Image = Buffer.from(bufferData).toString("base64");
-
-  //extract mimetype of the uploaded file frome ther req object e.g mp4,png
-  const fileType = req.file.mimetype;
-
-  // determine the file name e.g image or video
-  let fieldName = fileType.startsWith("image") ? "image" : "video";
-
-  //extract file extention
-  let fileExtention = fileType.split("/").pop();
-
-  // giving file a unique name
-  let fileName = `Wappy${Math.random()}.${fileExtention}`;
-
-  //conerting from base64 to Blob
-  function base64ToBlob(base64data, contentType = fileType) {
-    const byteCharacters = atob(base64data);
-
-    //create an array with same length as byte character converting each character to it's unicode code
-    const byteNumbers = new Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteNumbers[i] = byteCharacters.charCodeAt(i);
-    }
-
-    //create array that can be used to construct a blob, 8-bit unsign integer
-    let byteArray = new Uint8Array(byteNumbers);
-
-    // create a new blob obsject from the byte array
-    return new Blob([byteArray], { type: contentType });
-  }
-
-  const blob = base64ToBlob(base64Image);
-
-  //create a form data object and append the blob to as a file to it
-  let formData = new FormData();
-  formData.append(fieldName, blob, fileName);
-
-  //upload
   let payload = { fileName, formData };
-  console.log(payload);
 
   InsertImageModel(payload)
-    .then((response) => {
-      if (response.error) {
-        return res.send(responseObject(response.error.message, false, null));
+    .then((ImageUploadResponse) => {
+      if (ImageUploadResponse.error) {
+        return res.send(
+          responseObject(ImageUploadResponse.error.message, false, null)
+        );
       }
 
-      return res.send(responseObject("file uploaded", true, response.data));
+      return res.send(
+        responseObject("Image uploaded", true, ImageUploadResponse.data)
+      );
     })
     .catch((error) => {
-      return res.send(responseObject(error));
+      return res.send(error);
     });
-
-  console.log(formData);
 };
+
+// const photoUploadFunction = (req, res) => {
+//   if (!req.file) {
+//     res.send(responseObject("no file upaloaded", false, null));
+//   }
+//   // extract buffer data
+//   let bufferData = req.file.buffer;
+
+//   // conert buffer data to a base 64 encoded string
+//   let base64Image = Buffer.from(bufferData).toString("base64");
+
+//   //extract mimetype of the uploaded file frome ther req object e.g mp4,png
+//   const fileType = req.file.mimetype;
+
+//   // determine the file name e.g image or video
+//   let fieldName = fileType.startsWith("image") ? "image" : "video";
+
+//   //extract file extention
+//   let fileExtention = fileType.split("/").pop();
+
+//   // giving file a unique name
+//   let fileName = `Wappy${Math.random()}.${fileExtention}`;
+
+//   //conerting from base64 to Blob
+//   function base64ToBlob(base64data, contentType = fileType) {
+//     const byteCharacters = atob(base64data);
+
+//     //create an array with same length as byte character converting each character to it's unicode code
+//     const byteNumbers = new Array(byteCharacters.length);
+//     for (let i = 0; i < byteCharacters.length; i++) {
+//       byteNumbers[i] = byteCharacters.charCodeAt(i);
+//     }
+
+//     //create array that can be used to construct a blob, 8-bit unsign integer
+//     let byteArray = new Uint8Array(byteNumbers);
+
+//     // create a new blob obsject from the byte array
+//     return new Blob([byteArray], { type: contentType });
+//   }
+
+//   const blob = base64ToBlob(base64Image);
+
+//   //create a form data object and append the blob to as a file to it
+//   let formData = new FormData();
+//   formData.append(fieldName, blob, fileName);
+
+//   //upload
+//   let payload = { fileName, formData };
+//   console.log(payload);
+
+//   InsertImageModel(payload)
+//     .then((response) => {
+//       if (response.error) {
+//         return res.send(responseObject(response.error.message, false, null));
+//       }
+
+//       return res.send(responseObject("file uploaded", true, response.data));
+//     })
+//     .catch((error) => {
+//       return res.send(responseObject(error));
+//     });
+
+//   console.log(formData);
+// };
 
 module.exports = {
   Get_logged_in_user_controller,
   deleteUserFunction,
-  photoUploadFunction,
+  // photoUploadFunction,
   FetchUserFunction,
+  ImageUploadFunction,
 };
