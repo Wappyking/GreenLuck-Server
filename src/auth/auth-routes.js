@@ -7,6 +7,7 @@ const {
   UpdatePasswordFunction,
   ResetPasswordFunction,
   SignUpOTP,
+  ChangePasswordFunction,
 } = require("./auth-controller");
 const routes = Router();
 
@@ -16,5 +17,6 @@ routes.post("/signup", SignupFunction);
 routes.post("/login", LoginFunction);
 routes.post("/reset-password", ResetPasswordFunction);
 routes.post("/update-password", UpdatePasswordFunction);
+routes.post("/change-password", ChangePasswordFunction);
 
 module.exports = routes;

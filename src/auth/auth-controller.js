@@ -291,6 +291,55 @@ async function RequestOtp(req, res) {
   });
 }
 
+async function ChangePasswordFunction(req, res) {
+  let { email, oldPassword, newPassword } = req.body;
+
+  let newEmail = email.toLowerCase();
+
+  LoginFunction({ newEmail, oldPassword }).then((LoginResponse) => {
+    if (LoginResponse.error) {
+      return res.send(responseObject("Old Password Incorrect", false, null));
+    }
+
+    UpdatePasswordModel({ newEmail, newPassword }).then(
+      (UpdatePasswordResponse) => {
+        if (UpdatePasswordResponse.error) {
+          return res.send(
+            responseObject(UpdatePasswordResponse.error.message, false, null)
+          );
+        }
+
+        fetch_user_public_model(newEmail).then((fetchEmailResponse) => {
+          if (fetchEmailResponse.error) {
+            return res.send(fetchEmailResponse.error.message, false, null);
+          }
+
+          let userData = fetchEmailResponse.data[0];
+
+          let userName = userData.userName;
+
+          let message = `<p style="color:black">Your password has been changed successfully!<br></p>`;
+
+          sendEmail(
+            newEmail,
+            "Password Changed",
+            `Hello ${userName} `,
+            message
+          );
+
+          return res.send(
+            responseObject(
+              "password Updated",
+              true,
+              UpdatePasswordResponse.data
+            )
+          );
+        });
+      }
+    );
+  });
+}
+
 module.exports = {
   RequestOtp,
   SignupFunction,
@@ -298,4 +347,5 @@ module.exports = {
   ResetPasswordFunction,
   UpdatePasswordFunction,
   SignUpOTP,
+  ChangePasswordFunction,
 };
