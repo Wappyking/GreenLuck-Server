@@ -148,7 +148,7 @@ async function SignupFunction(req, res) {
       return res.send(responseObject("User Already Registered", false, null));
     }
 
-    let payload = { userName, newEmail, phone, uuid };
+    let payload = { userName, newEmail, phone };
 
     SignUp_public_model(payload)
       .then((SignUpPublicResponse) => {
