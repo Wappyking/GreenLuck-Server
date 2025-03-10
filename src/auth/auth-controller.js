@@ -38,53 +38,44 @@ async function SignUpOTP(req, res) {
 
   let newEmail = email.toLowerCase();
 
-  fetch_user_public_model(newEmail).then((fetchEmailResponse) => {
-    if (fetchEmailResponse.error) {
-      return res.send(
-        responseObject(fetchEmailResponse.error.message, false, null)
-      );
-    }
+  let emailFetchResponse = await fetch_user_public_model(newEmail);
+  let usernameFetchResponse = await fetch_user_userName_model(userName);
 
-    if (fetchEmailResponse.data.length > 0) {
-      return res.send(
-        responseObject(
-          "Email Already Registered,   Please login instead",
-          false,
-          null
-        )
-      );
-    }
+  if (emailFetchResponse.error) {
+    return res.send(
+      responseObject(emailFetchResponse.error.message, false, null)
+    );
+  }
 
-    fetch_user_userName_model(userName).then((userNameResponse) => {
-      if (userNameResponse.error) {
-        return res.send(
-          responseObject(userNameResponse.error.message, false, null)
-        );
-      }
+  if (emailFetchResponse.data.length > 1) {
+    return res.send(
+      responseObject("Email Already Exist, Login Instead", false, null)
+    );
+  }
 
-      if (userNameResponse.data.length > 0) {
-        return res.send("Username is not available", false, null);
-      }
+  if (usernameFetchResponse.error) {
+    return res.send(
+      responseObject(usernameFetchResponse.error.message, false, null)
+    );
+  }
 
-      function otp() {
-        return Math.floor(100000 + Math.random() * 900000);
-      }
-      var otpNumber = otp();
-      var otpExpiry = new Date(Date.now() + 5 * 60 * 1000).toISOString();
-      let OtpObj = { otpNumber, otpExpiry };
+  if (usernameFetchResponse.data.length > 1) {
+    return res.send(responseObject("Username Already Taken", false, null));
+  }
 
-      let message = `<p style="color:black">Copy the One Time Password (OTP) below <br></p><h6 style="font-size:large; color:#016401;">${otpNumber}<h6/>`;
+  function otp() {
+    return Math.floor(100000 + Math.random() * 900000);
+  }
+  let otpNumber = otp();
 
-      sendEmail(
-        newEmail,
-        "One Time Password (OTP)",
-        `Hello ${userName}`,
-        message
-      );
+  let message = `<p style="color:black">Copy the One Time Password (OTP) below <br></p><h6 style="font-size:large; color:#016401;">${otpNumber}<h6/>`;
 
-      return res.send(responseObject("Otp sent", true, OtpObj));
-    });
-  });
+  sendEmail(newEmail, "One Time Password (OTP)", `Hello ${userName}`, message);
+
+  let otpExpiry = new Date(Date.now() + 5 * 60 * 1000).toISOString();
+  let OtpObj = { otpNumber, otpExpiry };
+
+  return res.send(responseObject("Otp Sent", true, OtpObj));
 }
 
 const LoginFunction = (req, res) => {
