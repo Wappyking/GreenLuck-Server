@@ -6,9 +6,10 @@ function SignUp_public_model(payload) {
     .insert([
       {
         userName: payload.userName,
-        email: payload.email,
+        email: payload.newEmail,
         phone: payload.phone,
-        uuid: payload.uuid,
+        unit: 0,
+        role: "free",
       },
     ])
     .select();
