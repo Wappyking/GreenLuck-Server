@@ -161,10 +161,10 @@ async function SignupFunction(req, res) {
     let payload = { newEmail, password };
 
     SignUp_private_model(payload)
-      .then((SignUpPublicResponse) => {
-        if (SignUpPublicResponse.error) {
+      .then((SignUpPrivateResponse) => {
+        if (SignUpPrivateResponse.error) {
           return res.send(
-            responseObject(SignUpPublicResponse.error.message, false, null)
+            responseObject(SignUpPrivateResponse.error.message, false, null)
           );
         }
 
@@ -173,10 +173,10 @@ async function SignupFunction(req, res) {
         let payload = { userName, newEmail, uuid };
 
         SignUp_public_model(payload)
-          .then((SignUpPrivateResponse) => {
-            if (SignUpPrivateResponse.error) {
+          .then((SignUpPublicResponse) => {
+            if (SignUpPublicResponse.error) {
               return res.send(
-                responseObject(SignUpPrivateResponse.error.message, false, null)
+                responseObject(SignUpPublicResponse.error.message, false, null)
               );
             }
 
