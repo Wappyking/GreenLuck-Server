@@ -147,47 +147,57 @@ async function SignupFunction(req, res) {
     if (fetchEmailResponse.data.length > 0) {
       return res.send(responseObject("User Already Registered", false, null));
     }
-    let payload = { newEmail, password };
 
-    SignUp_private_model(payload)
-      .then((SignUpPrivateResponse) => {
-        if (SignUpPrivateResponse.error) {
+    let payload = { userName, newEmail, phone, uuid };
+
+    SignUp_public_model(payload)
+      .then((SignUpPublicResponse) => {
+        if (SignUpPublicResponse.error) {
           return res.send(
-            responseObject(SignUpPrivateResponse.error.message, false, null)
+            responseObject(SignUpPublicResponse.error.message, false, null)
           );
         }
-        let uuid = SignUpPrivateResponse.data.user.id;
 
-        let payload = { userName, newEmail, phone, uuid };
+        let payload = { newEmail, password };
 
-        SignUp_public_model(payload)
-          .then((SignUpPublicResponse) => {
-            if (SignUpPublicResponse.error) {
+        SignUp_private_model(payload)
+          .then((SignUpPrivateResponse) => {
+            if (SignUpPrivateResponse.error) {
               return res.send(
-                responseObject(SignUpPublicResponse.error.message, false, null)
+                responseObject(SignUpPrivateResponse.error.message, false, null)
               );
             }
+            let uuid = SignUpPrivateResponse.data.user.id;
 
-            let userPublicData = SignUpPublicResponse;
-            let userPrivateData = SignUpPrivateResponse;
-            let access_token = SignUpPrivateResponse.data.session.access_token;
-            let refresh_token =
-              SignUpPrivateResponse.data.session.refresh_token;
+            uuid_update_public_model(uuid).then((uuidResponse) => {
+              if (uuidResponse.error) {
+                return res.send(
+                  responseObject(uuidResponse.error.message, false, null)
+                );
+              }
 
-            let token = { access_token, refresh_token };
+              let userPublicData = SignUpPublicResponse;
+              let userPrivateData = SignUpPrivateResponse;
+              let access_token =
+                SignUpPrivateResponse.data.session.access_token;
+              let refresh_token =
+                SignUpPrivateResponse.data.session.refresh_token;
 
-            let data = { userPublicData, userPrivateData, token };
+              let token = { access_token, refresh_token };
 
-            let message = `<p style="color:black">Your account has been created successfully! <br></p>`;
+              let data = { userPublicData, userPrivateData, token };
 
-            sendEmail(
-              newEmail,
-              "Registration Successful",
-              `Hello ${userName}`,
-              message
-            );
+              let message = `<p style="color:black">Your account has been created successfully! <br></p>`;
 
-            return res.send(responseObject("SignUp successfull", true, data));
+              sendEmail(
+                newEmail,
+                "Registration Successful",
+                `Hello ${userName}`,
+                message
+              );
+
+              return res.send(responseObject("SignUp successfull", true, data));
+            });
           })
           .catch((error) => {
             return res.send(error);
