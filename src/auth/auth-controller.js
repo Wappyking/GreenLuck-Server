@@ -33,7 +33,7 @@ const {
 const { use } = require("./auth-routes");
 const { sendEmail } = require("../utility/sendEmail");
 
-const RequestOtp = (req, res) => {
+async function SignUpOTP(req, res) {
   let { email, userName } = req.body;
 
   let newEmail = email.toLowerCase();
@@ -85,7 +85,7 @@ const RequestOtp = (req, res) => {
       return res.send(responseObject("Otp sent", true, OtpObj));
     });
   });
-};
+}
 
 const LoginFunction = (req, res) => {
   let { email, password } = req.body;
@@ -132,7 +132,7 @@ const LoginFunction = (req, res) => {
     });
 };
 
-const SignupFunction = (req, res) => {
+async function SignupFunction(req, res) {
   let { userName, email, phone, password } = req.body;
 
   let newEmail = email.toLowerCase();
@@ -178,6 +178,15 @@ const SignupFunction = (req, res) => {
 
             let data = { userPublicData, userPrivateData, token };
 
+            let message = `<p style="color:black">Your account has been created successfully! <br></p>`;
+
+            sendEmail(
+              newEmail,
+              "Registration Successful",
+              `Hello ${userName}`,
+              message
+            );
+
             return res.send(responseObject("SignUp successfull", true, data));
           })
           .catch((error) => {
@@ -188,7 +197,7 @@ const SignupFunction = (req, res) => {
         return res.send(error);
       });
   });
-};
+}
 
 const ResetPasswordFunction = (req, res) => {
   let { email } = req.body;
@@ -208,7 +217,7 @@ const ResetPasswordFunction = (req, res) => {
   });
 };
 
-const UpdatePasswordFunction = (req, res) => {
+async function UpdatePasswordFunction(req, res) {
   let { email, newPassword } = req.body;
 
   let newEmail = email.toLowerCase();
@@ -221,12 +230,66 @@ const UpdatePasswordFunction = (req, res) => {
         );
       }
 
-      return res.send(
-        responseObject("password Updated", true, UpdatePasswordResponse.data)
-      );
+      fetch_user_public_model(newEmail).then((fetchEmailResponse) => {
+        if (fetchEmailResponse.error) {
+          return res.send(fetchEmailResponse.error.message, false, null);
+        }
+
+        let userData = fetchEmailResponse.data[0];
+
+        let userName = userData.userName;
+
+        let message = `<p style="color:black">Your password has been changed successfully!<br></p>`;
+
+        sendEmail(newEmail, "Password Changed", `Hello ${userName} `, message);
+
+        return res.send(
+          responseObject("password Updated", true, UpdatePasswordResponse.data)
+        );
+      });
     }
   );
-};
+}
+
+async function RequestOtp(req, res) {
+  let { email } = req.body;
+
+  let newEmail = email.toLowerCase();
+
+  fetch_user_public_model(newEmail).then((fetchEmailResponse) => {
+    if (fetchEmailResponse.error) {
+      return res.send(
+        responseObject(fetchEmailResponse.error.message, false, null)
+      );
+    }
+
+    if (fetchEmailResponse.data.length > 0) {
+      return res.send(responseObject("User Does Not Exist", false, null));
+    }
+
+    let userData = fetchEmailResponse.data[0];
+
+    let userName = userData.userName;
+
+    function otp() {
+      return Math.floor(100000 + Math.random() * 900000);
+    }
+    var otpNumber = otp();
+    var otpExpiry = new Date(Date.now() + 5 * 60 * 1000).toISOString();
+    let OtpObj = { otpNumber, otpExpiry };
+
+    let message = `<p style="color:black">Copy the One Time Password (OTP) below <br></p><h6 style="font-size:large; color:#016401;">${otpNumber}<h6/>`;
+
+    sendEmail(
+      newEmail,
+      "One Time Password (OTP)",
+      `Hello ${userName}`,
+      message
+    );
+
+    return res.send(responseObject("Otp sent", true, OtpObj));
+  });
+}
 
 module.exports = {
   RequestOtp,
@@ -234,4 +297,5 @@ module.exports = {
   LoginFunction,
   ResetPasswordFunction,
   UpdatePasswordFunction,
+  SignUpOTP,
 };
