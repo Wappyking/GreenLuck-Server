@@ -202,11 +202,11 @@ async function SignupFunction(req, res) {
             return res.send(responseObject("SignUp successfull", true, data));
           })
           .catch((error) => {
-            return res.send(error);
+            return error;
           });
       })
       .catch((error) => {
-        return res.send(error);
+        return error;
       });
   });
 }
