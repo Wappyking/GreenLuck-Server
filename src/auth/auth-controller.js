@@ -296,7 +296,7 @@ async function ChangePasswordFunction(req, res) {
 
   let newEmail = email.toLowerCase();
 
-  LoginFunction({ newEmail, oldPassword }).then((LoginResponse) => {
+  login_model({ newEmail, oldPassword }).then((LoginResponse) => {
     if (LoginResponse.error) {
       return res.send(responseObject("Old Password Incorrect", false, null));
     }
