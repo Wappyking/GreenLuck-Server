@@ -65,7 +65,9 @@ async function SignUpOTP(req, res) {
           }
 
           if (userNameResponse.data.length > 0) {
-            return res.send("Username is not available", false, null);
+            return res.send(
+              responseObject("Username is not available", false, null)
+            );
           }
 
           function otp() {
