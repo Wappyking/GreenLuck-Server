@@ -182,8 +182,8 @@ async function SignupFunction(req, res) {
               );
             }
 
-            let userPublicData = SignUpPublicResponse;
-            let userPrivateData = SignUpPrivateResponse;
+            let userPublicData = SignUpPublicResponse.data[0];
+            let userPrivateData = SignUpPrivateResponse.data.user;
             let access_token = SignUpPrivateResponse.data.session.access_token;
             let refresh_token =
               SignUpPrivateResponse.data.session.refresh_token;
