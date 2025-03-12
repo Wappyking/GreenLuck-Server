@@ -236,6 +236,9 @@ const ResetPasswordFunction = (req, res) => {
         );
       }
 
+      let userData = EmailSearchResponse.data[0];
+      let userName = userData.userName;
+
       function otp() {
         return Math.floor(100000 + Math.random() * 900000);
       }
