@@ -218,16 +218,44 @@ const ResetPasswordFunction = (req, res) => {
 
   let newEmail = email.toLowerCase();
 
-  ResetPasswordModel(newEmail).then((resetPasswordResponse) => {
-    if (resetPasswordResponse.error) {
+  fetch_user_public_model(newEmail).then((EmailSearchResponse) => {
+    if (EmailSearchResponse.error) {
       return res.send(
-        responseObject(resetPasswordResponse.error.message, false, null)
+        responseObject(EmailSearchResponse.error.message, false, null)
       );
     }
 
-    return res.send(
-      responseObject("password reset sent", true, resetPasswordResponse.data)
-    );
+    if (EmailSearchResponse.data.length < 1) {
+      return res.send(responseObject("User Does Not Exist", false, null));
+    }
+
+    ResetPasswordModel(newEmail).then((resetPasswordResponse) => {
+      if (resetPasswordResponse.error) {
+        return res.send(
+          responseObject(resetPasswordResponse.error.message, false, null)
+        );
+      }
+
+      function otp() {
+        return Math.floor(100000 + Math.random() * 900000);
+      }
+      var otpNumber = otp();
+      var otpExpiry = new Date(Date.now() + 5 * 60 * 1000).toISOString();
+      let OtpObj = { otpNumber, otpExpiry };
+
+      let message = `<p style="color:black">Copy the One Time Password (OTP) below <br></p><h6 style="font-size:large; color:#016401;">${otpNumber}<h6/>`;
+
+      sendEmail(
+        newEmail,
+        "One Time Password (OTP)",
+        `Hello ${userName}`,
+        message
+      ).catch((error) => {
+        return error;
+      });
+
+      return res.send(responseObject("Otp sent", true, OtpObj));
+    });
   });
 };
 
