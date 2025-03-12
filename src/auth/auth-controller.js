@@ -238,6 +238,7 @@ const ResetPasswordFunction = (req, res) => {
 
       let userData = EmailSearchResponse.data[0];
       let userName = userData.userName;
+      let uuid = EmailSearchResponse.uuid;
 
       function otp() {
         return Math.floor(100000 + Math.random() * 900000);
@@ -308,7 +309,7 @@ async function RequestOtp(req, res) {
       );
     }
 
-    if (fetchEmailResponse.data.length > 0) {
+    if (fetchEmailResponse.data.length < 1) {
       return res.send(responseObject("User Does Not Exist", false, null));
     }
 
