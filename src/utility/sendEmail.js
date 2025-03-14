@@ -10,16 +10,28 @@ async function sendEmail(to, subject, greeting, message, extra) {
   //   const imageAttachment = await readFileAsync("/logo.png");
   // Create a Nodemailer transporter
   const transporter = nodemailer.createTransport({
-    service: "gmail",
+    host: "mail.privateemail.com",
+    port: 465,
+    // secure: false,
+    // service: "gmail",
+    // host: "www.privateemail.com",
+    // host: "www.localhost.com",
+    // port: 25,
     auth: {
-      user: "greenlucktips@gmail.com",
-      pass: "jtta tlzy blji gguj",
+      // user: "greenlucktips@gmail.com",
+      user: "admin@greenlucktips.com",
+      // pass: "jtta tlzy blji gguj",
+      pass: "Wappy5!ng",
     },
   });
 
   // Send email
   const info = await transporter.sendMail({
-    from: "greenlucktips@gmail.com",
+    from: {
+      name: "Green Luck",
+      address: "admin@greenlucktips.com",
+    },
+    // from: "greenlucktips@gmail.com",
     to: to,
     subject: subject,
     html: emailTemplate(greeting, message, extra),
