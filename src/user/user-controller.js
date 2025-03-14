@@ -132,7 +132,7 @@ const ImageUploadFunction = (req, res) => {
       let path = ImageUploadResponse.data.fullPath;
 
       return res.send(
-        responseObject("Image uploaded", true, getUrlResponse.data)
+        responseObject("Image uploaded", true, ImageUploadResponse.data)
       );
     })
     .catch((error) => {
