@@ -141,11 +141,11 @@ const ImageUploadFunction = (req, res) => {
             responseObject(getUrlResponse.error.message, false, null)
           );
         }
-      });
 
-      return res.send(
-        responseObject("Image uploaded", true, getUrlResponse.data)
-      );
+        return res.send(
+          responseObject("Image uploaded", true, getUrlResponse.data)
+        );
+      });
     })
     .catch((error) => {
       return res.send(error);
