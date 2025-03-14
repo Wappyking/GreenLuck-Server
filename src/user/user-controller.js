@@ -142,9 +142,7 @@ const ImageUploadFunction = (req, res) => {
           );
         }
 
-        return res.send(
-          responseObject("Image uploaded", true, UrlResponse.data)
-        );
+        return res.send(responseObject("Image uploaded", true, UrlResponse));
       });
     })
     .catch((error) => {
