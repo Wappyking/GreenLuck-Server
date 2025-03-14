@@ -133,7 +133,7 @@ const ImageUploadFunction = (req, res) => {
         );
       }
 
-      let path = ImageUploadResponse.data.fullPath;
+      let path = ImageUploadResponse.data.path;
 
       GetImageUrlModel(path).then((UrlResponse) => {
         if (UrlResponse.error) {
