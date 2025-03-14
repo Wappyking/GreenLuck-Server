@@ -114,10 +114,12 @@ const FetchUserFunction = (req, res) => {
 };
 
 const ImageUploadFunction = (req, res) => {
-  const { fileName, formData } = req.body;
+  const { base64 } = req.body;
+
+  let fileName = `GreenLuck${Math.random()}.Jpg`;
 
   //upload
-  let payload = { fileName, formData };
+  let payload = { fileName, base64 };
 
   InsertImageModel(payload)
     .then((ImageUploadResponse) => {
