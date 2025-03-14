@@ -11,12 +11,10 @@ function InsertImageModel(payload) {
     .from("public_bucket")
     .upload(payload.fileName, decode(payload.base64), {
       contentType: "image/png",
-    })
-    .getPublicUrl();
+    });
 }
 
 module.exports = {
   GetUserByAccessToken,
   InsertImageModel,
-  GetImageUrlModel,
 };
