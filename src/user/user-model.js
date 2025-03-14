@@ -14,7 +14,14 @@ function InsertImageModel(payload) {
     });
 }
 
+function GetImageUrlModel(payload) {
+  return supabase.storage.from("public_bucket").getPublicUrl(payload, {
+    download: true,
+  });
+}
+
 module.exports = {
   GetUserByAccessToken,
   InsertImageModel,
+  GetImageUrlModel,
 };

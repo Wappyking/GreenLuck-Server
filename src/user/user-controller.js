@@ -10,7 +10,11 @@ const {
   delete_notification_model,
 } = require("../notification/notification-model");
 const { responseObject, isTokenValid } = require("../utility");
-const { GetUserByAccessToken, InsertImageModel } = require("./user-model");
+const {
+  GetUserByAccessToken,
+  InsertImageModel,
+  GetImageUrlModel,
+} = require("./user-model");
 
 const Get_logged_in_user_controller = (req, res) => {
   let token = req.headers;
@@ -131,9 +135,17 @@ const ImageUploadFunction = (req, res) => {
 
       let path = ImageUploadResponse.data.fullPath;
 
-      return res.send(
-        responseObject("Image uploaded", true, ImageUploadResponse.data)
-      );
+      GetImageUrlModel(path).then((UrlResponse) => {
+        if (UrlResponse.error) {
+          return res.send(
+            responseObject(UrlResponse.error.message, false, null)
+          );
+        }
+
+        return res.send(
+          responseObject("Image uploaded", true, UrlResponse.data)
+        );
+      });
     })
     .catch((error) => {
       return res.send(error);
