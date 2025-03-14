@@ -1,5 +1,5 @@
 const supabase = require("../../config/supaconfig_index");
-const decode = require("base64-arraybuffer");
+// const decode = require("base64-arraybuffer");
 
 const GetUserByAccessToken = (token) => {
   return supabase.auth.getUser(token);
@@ -9,7 +9,7 @@ const GetUserByAccessToken = (token) => {
 function InsertImageModel(payload) {
   return supabase.storage
     .from("public_bucket")
-    .upload(payload.fileName, decode(payload.base64), {
+    .upload(payload.fileName, payload.base64, {
       contentType: "image/png",
     });
 }
