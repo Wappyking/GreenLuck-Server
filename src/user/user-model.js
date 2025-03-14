@@ -11,17 +11,12 @@ function InsertImageModel(payload) {
     .from("public_bucket")
     .upload(payload.fileName, decode(payload.base64), {
       contentType: "image/png",
-    });
-}
-
-function Get_Image_URL_Model(payload) {
-  return supabase.storage.from("public-bucket").getPublicUrl(payload, {
-    download: true,
-  });
+    })
+    .getPublicUrl();
 }
 
 module.exports = {
   GetUserByAccessToken,
   InsertImageModel,
-  Get_Image_URL_Model,
+  GetImageUrlModel,
 };
