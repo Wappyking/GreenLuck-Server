@@ -135,17 +135,9 @@ const ImageUploadFunction = (req, res) => {
 
       let path = ImageUploadResponse.data.path;
 
-      // GetImageUrlModel(path).then((UrlResponse) => {
-      //   if (UrlResponse.error) {
-      //     return res.send(
-      //       responseObject(UrlResponse.error.message, false, null)
-      //     );
-      //   }
-
       return res.send(
         responseObject("Image uploaded", true, ImageUploadResponse.data)
       );
-      // });
     })
     .catch((error) => {
       return res.send(error);
