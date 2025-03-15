@@ -1,5 +1,6 @@
 const supabase = require("../../config/supaconfig_index");
-const decode = require("base64-arraybuffer");
+// const decode = require("base64-arraybuffer");
+import { decode } from "base64-arraybuffer";
 
 const GetUserByAccessToken = (token) => {
   return supabase.auth.getUser(token);
