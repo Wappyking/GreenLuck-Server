@@ -17,5 +17,4 @@ function InsertImageModel(payload) {
 module.exports = {
   GetUserByAccessToken,
   InsertImageModel,
-  GetImageUrlModel,
 };
