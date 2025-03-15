@@ -117,33 +117,6 @@ const FetchUserFunction = (req, res) => {
   });
 };
 
-const ImageUploadFunction = (req, res) => {
-  const { base64 } = req.body;
-
-  let fileName = `GreenLuck${Math.random()}.Jpg`;
-
-  //upload
-  let payload = { fileName, base64 };
-
-  InsertImageModel(payload)
-    .then((ImageUploadResponse) => {
-      if (ImageUploadResponse.error) {
-        return res.send(
-          responseObject(ImageUploadResponse.error.message, false, null)
-        );
-      }
-
-      let path = ImageUploadResponse.data.path;
-
-      return res.send(
-        responseObject("Image uploaded", true, ImageUploadResponse.data)
-      );
-    })
-    .catch((error) => {
-      return res.send(error);
-    });
-};
-
 const photoUploadFunction = (req, res) => {
   if (!req.file) {
     res.send(responseObject("no file upaloaded", false, null));
@@ -213,5 +186,4 @@ module.exports = {
   deleteUserFunction,
   photoUploadFunction,
   FetchUserFunction,
-  ImageUploadFunction,
 };
