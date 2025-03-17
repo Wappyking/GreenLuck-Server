@@ -87,9 +87,7 @@ function UpdataUserInfoModel({ uuid, data }) {
 }
 
 function ResetPasswordModel(payload) {
-  return supabase.auth.resetPasswordForEmail(payload.uuid, {
-    email: payload.newEmail,
-  });
+  return supabase.auth.resetPasswordForEmail(payload.uuid, payload.newEmail);
 }
 
 function UpdatePasswordModel({ uuid, email, newPassword }) {
