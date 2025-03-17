@@ -232,9 +232,9 @@ const ResetPasswordFunction = (req, res) => {
     let userData = EmailSearchResponse.data[0];
 
     let uuid = userData.uuid;
-    let payload = { uuid, newEmail };
+    // let payload = { uuid, newEmail };
 
-    ResetPasswordModel(payload).then((resetPasswordResponse) => {
+    ResetPasswordModel(newEmail).then((resetPasswordResponse) => {
       if (resetPasswordResponse.error) {
         return res.send(
           responseObject(resetPasswordResponse.error.message, false, null)
@@ -272,33 +272,31 @@ async function UpdatePasswordFunction(req, res) {
 
   let newEmail = email.toLowerCase();
 
-  UpdatePasswordModel({ uuid, newEmail, newPassword }).then(
-    (UpdatePasswordResponse) => {
-      if (UpdatePasswordResponse.error) {
-        return res.send(
-          responseObject(UpdatePasswordResponse.error.message, false, null)
-        );
+  UpdatePasswordModel({ uuid, newPassword }).then((UpdatePasswordResponse) => {
+    if (UpdatePasswordResponse.error) {
+      return res.send(
+        responseObject(UpdatePasswordResponse.error.message, false, null)
+      );
+    }
+
+    fetch_user_public_model(newEmail).then((fetchEmailResponse) => {
+      if (fetchEmailResponse.error) {
+        return res.send(fetchEmailResponse.error.message, false, null);
       }
 
-      fetch_user_public_model(newEmail).then((fetchEmailResponse) => {
-        if (fetchEmailResponse.error) {
-          return res.send(fetchEmailResponse.error.message, false, null);
-        }
+      let userData = fetchEmailResponse.data[0];
 
-        let userData = fetchEmailResponse.data[0];
+      let userName = userData.userName;
 
-        let userName = userData.userName;
+      let message = `<p style="color:black">Your password has been changed successfully!<br></p>`;
 
-        let message = `<p style="color:black">Your password has been changed successfully!<br></p>`;
+      sendEmail(newEmail, "Password Changed", `Hello ${userName} `, message);
 
-        sendEmail(newEmail, "Password Changed", `Hello ${userName} `, message);
-
-        return res.send(
-          responseObject("password Updated", true, UpdatePasswordResponse.data)
-        );
-      });
-    }
-  );
+      return res.send(
+        responseObject("password Updated", true, UpdatePasswordResponse.data)
+      );
+    });
+  });
 }
 
 async function RequestOtp(req, res) {
