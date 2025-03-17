@@ -90,8 +90,8 @@ function ResetPasswordModel(email) {
   return supabase.auth.resetPasswordForEmail(email);
 }
 
-function UpdatePasswordModel({ email, newPassword }) {
-  return supabase.auth.updateUser({
+function UpdatePasswordModel({ uuid, email, newPassword }) {
+  return supabase.auth.updateUser(uuid, {
     email: email,
     password: newPassword,
   });
