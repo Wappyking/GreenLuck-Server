@@ -229,16 +229,20 @@ const ResetPasswordFunction = (req, res) => {
       return res.send(responseObject("User Does Not Exist", false, null));
     }
 
-    ResetPasswordModel(newEmail).then((resetPasswordResponse) => {
+    let userData = EmailSearchResponse.data[0];
+
+    let uuid = userData.uuid;
+    let payload = { uuid, newEmail };
+
+    ResetPasswordModel(payload).then((resetPasswordResponse) => {
       if (resetPasswordResponse.error) {
         return res.send(
           responseObject(resetPasswordResponse.error.message, false, null)
         );
       }
 
-      let userData = EmailSearchResponse.data[0];
       let userName = userData.userName;
-      let uuid = EmailSearchResponse.uuid;
+      // let uuid = EmailSearchResponse.uuid;
 
       function otp() {
         return Math.floor(100000 + Math.random() * 900000);
