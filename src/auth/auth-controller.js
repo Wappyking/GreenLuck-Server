@@ -365,7 +365,7 @@ async function RequestOtp(req, res) {
       message
     );
 
-    return res.send(responseObject("Otp sent", true, OtpObj));
+    return res.send(responseObject("Otp sent", true, { userData, OtpObj }));
   });
 }
 
