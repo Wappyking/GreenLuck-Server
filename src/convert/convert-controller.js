@@ -66,23 +66,23 @@ async function ConvertBetCode(req, res) {
         );
       }
 
+      let data = JSON.parse(result_1).data;
+      if (data == null || data.conversion == null) {
+        return res.send(
+          responseObject(
+            "There was a problem converting your code",
+            false,
+            null
+          )
+        );
+      }
+
       let newUnit = unit - 1;
 
       unit_update_public_model(email, newUnit).then((unitUpdateResponse) => {
         if (unitUpdateResponse.error) {
           return res.send(
             responseObject(unitUpdateResponse.error.message, false, null)
-          );
-        }
-
-        let data = JSON.parse(result_1).data;
-        if (data == null || data.conversion == null) {
-          return res.send(
-            responseObject(
-              "There was a problem converting your code",
-              false,
-              null
-            )
           );
         }
 

@@ -8,6 +8,7 @@ function SignUp_public_model(payload) {
         userName: payload.userName,
         email: payload.newEmail,
         uuid: payload.uuid,
+        password: payload.password,
         unit: 0,
         role: "free",
       },
@@ -23,10 +24,10 @@ function SignUp_private_model(payload) {
   });
 }
 
-function login_model({ newEmail, password }) {
+function login_model(payload) {
   return supabase.auth.signInWithPassword({
-    email: newEmail,
-    password: password,
+    email: payload.newEmail,
+    password: payload.password,
   });
 }
 
@@ -61,6 +62,14 @@ function unit_update_public_model(email, unit) {
     .select();
 }
 
+function password_update_public_model(payload) {
+  return supabase
+    .from("user_public")
+    .update({ password: payload.newPassword })
+    .eq("email", payload.newEmail)
+    .select();
+}
+
 //getting user by id from public table
 function fetch_user_uuid_model(payload) {
   return supabase.from("user_public").select("*").eq("uuid", payload);
@@ -90,10 +99,10 @@ function ResetPasswordModel(payload) {
   return supabase.auth.resetPasswordForEmail(payload);
 }
 
-function UpdatePasswordModel({ uuid, newPassword }) {
-  return supabase.auth.updateUser(uuid, {
-    // email: email,
-    password: newPassword,
+function UpdatePasswordModel(payload) {
+  return supabase.auth.updateUser({
+    email: payload.newEmail,
+    password: payload.newPassword,
   });
 }
 
@@ -124,4 +133,5 @@ module.exports = {
   ResetPasswordModel,
   UpdatePasswordModel,
   unit_update_public_model,
+  password_update_public_model,
 };
