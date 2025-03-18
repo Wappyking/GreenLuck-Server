@@ -94,26 +94,26 @@ const FetchUserFunction = (req, res) => {
     let uuid = userPublicData.uuid;
     console.log(uuid);
 
-    // getUserByIdPrivate(uuid).then((userPrivateResponse) => {
-    //   if (userPrivateResponse.error) {
-    //     return res.send(
-    //       responseObject(
-    //         userPrivateResponse.error.message,
-    //         false,
-    //         userPublicData
-    //       )
-    //     );
-    //   }
+    getUserByIdPrivate(uuid).then((userPrivateResponse) => {
+      if (userPrivateResponse.error) {
+        return res.send(
+          responseObject(
+            userPrivateResponse.error.message,
+            false,
+            userPublicData
+          )
+        );
+      }
 
-    //   if (userPrivateResponse.data.length < 1) {
-    //     return res.send(responseObject("invalid user", false, null));
-    //   }
+      if (userPrivateResponse.data.length < 1) {
+        return res.send(responseObject("invalid user", false, null));
+      }
 
-    //   let userPrivateData = userPrivateResponse.data[0];
+      let userPrivateData = userPrivateResponse.data[0];
 
-    // let data = { userPublicData, userPrivateData };
-    return res.send(responseObject("userData fetched", true, userPublicData));
-    // });
+      let data = { userPublicData, userPrivateData };
+      return res.send(responseObject("userData fetched", true, userPublicData));
+    });
   });
 };
 

@@ -247,7 +247,7 @@ const ResetPasswordFunction = (req, res) => {
     var otpExpiry = new Date(Date.now() + 5 * 60 * 1000).toISOString();
     let OtpObj = { otpNumber, otpExpiry };
 
-    let message = `<p style="color:black">Copy the One Time Password (OTP) below <br></p><h6 style="font-size:large; color:#016401;">${otpNumber}<h6/>`;
+    let message = `<p style="color:black">Copy the One Time Password (OTP) below to rest your password<br></p><h6 style="font-size:large; color:#016401;">${otpNumber}<h6/>`;
 
     sendEmail(
       newEmail,
@@ -270,6 +270,10 @@ async function UpdatePasswordFunction(req, res) {
   fetch_user_public_model(newEmail).then((fetchEmailResponse) => {
     if (fetchEmailResponse.error) {
       return res.send(fetchEmailResponse.error.message, false, null);
+    }
+
+    if (fetchEmailResponse.data.length < 1) {
+      return res.send(responseObject("User does not exist", false, null));
     }
 
     let userData = fetchEmailResponse.data[0];
