@@ -258,7 +258,7 @@ const ResetPasswordFunction = (req, res) => {
       return error;
     });
 
-    return res.send(responseObject("Otp sent", true, OtpObj));
+    return res.send(responseObject("Otp sent", true, { userData, OtpObj }));
   });
 };
 
