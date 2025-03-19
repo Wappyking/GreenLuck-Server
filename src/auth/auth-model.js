@@ -70,6 +70,18 @@ function password_update_public_model(payload) {
     .select();
 }
 
+function profile_update_public_model(payload) {
+  return supabase
+    .from("user_public")
+    .update({
+      phone: payload.phone,
+      country: payload.country,
+      countryFlag: payload.countryFlag,
+    })
+    .eq("email", payload.email)
+    .select();
+}
+
 //getting user by id from public table
 function fetch_user_uuid_model(payload) {
   return supabase.from("user_public").select("*").eq("uuid", payload);
@@ -134,4 +146,5 @@ module.exports = {
   UpdatePasswordModel,
   unit_update_public_model,
   password_update_public_model,
+  profile_update_public_model,
 };

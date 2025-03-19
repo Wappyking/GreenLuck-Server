@@ -30,6 +30,7 @@ const {
   UpdatePasswordModel,
   ResetPasswordModel,
   password_update_public_model,
+  profile_update_public_model,
 } = require("./auth-model");
 const { use } = require("./auth-routes");
 const { sendEmail } = require("../utility/sendEmail");
@@ -430,6 +431,24 @@ async function ChangePasswordFunction(req, res) {
   });
 }
 
+const updateProfileFunction = (req, res) => {
+  let { email, country, countryFlag, phone } = req.body;
+
+  let payload = { email, country, countryFlag, phone };
+
+  profile_update_public_model(payload).then((ProfileUpdateResponse) => {
+    if (ProfileUpdateResponse.error) {
+      return res.send(
+        responseObject(ProfileUpdateResponse.error.message, false, null)
+      );
+    }
+
+    return res.send(
+      responseObject("Profile Updated", true, ProfileUpdateResponse.data)
+    );
+  });
+};
+
 module.exports = {
   RequestOtp,
   SignupFunction,
@@ -438,4 +457,5 @@ module.exports = {
   UpdatePasswordFunction,
   SignUpOTP,
   ChangePasswordFunction,
+  updateProfileFunction,
 };
