@@ -15,6 +15,7 @@ const {
   InsertImageModel,
   GetImageUrlModel,
 } = require("./user-model");
+const { update_plan_model } = require("../plan/plan-model");
 
 const Get_logged_in_user_controller = (req, res) => {
   let token = req.headers;
@@ -90,7 +91,30 @@ const FetchUserFunction = (req, res) => {
       return res.send(responseObject("invalid user", false, null));
     }
 
-    let userPublicData = userPublicResponse.data[0];
+    let userPublicData1 = userPublicResponse.data[0];
+
+    let currentTime = new Date(Date.now);
+    let expiryDate = new Date(userPublicData1.expiryDate);
+
+    if (currentTime > expiryDate) {
+      let role = "free";
+      let planName = "free";
+      let expiryDate = null;
+      let email = newEmail;
+
+      let payload = { email, expiryDate, planName, role };
+      update_plan_model(payload).then((updatePlanResponse) => {
+        if (updatePlanResponse.error) {
+          return res.send(
+            responseObject(updatePlanResponse.error.message, false, null)
+          );
+        }
+      });
+    }
+
+    let userPublicData =
+      currentTime > expiryDate ? updatePlanResponse.data[0] : userPublicData1;
+
     let uuid = userPublicData.uuid;
     console.log(uuid);
 

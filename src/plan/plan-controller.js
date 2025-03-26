@@ -1,5 +1,10 @@
+const { fetch_user_public_model } = require("../auth/auth-model");
 const { responseObject } = require("../utility");
-const { fetch_all_plans_model, fetch_plans_id_model } = require("./plan-model");
+const {
+  fetch_all_plans_model,
+  fetch_plans_id_model,
+  update_plan_model,
+} = require("./plan-model");
 
 const FetchAllPlansFunction = (req, res) => {
   fetch_all_plans_model().then((response) => {
@@ -31,4 +36,41 @@ const FetchPlansIDFunction = (req, res) => {
   });
 };
 
-module.exports = { FetchAllPlansFunction, FetchPlansIDFunction };
+const GetPlanFunction = (req, res) => {
+  let { duration, planName, email } = req.body;
+
+  fetch_user_public_model(email).then((fetchUserResponse) => {
+    if (fetchUserResponse.error) {
+      return res.send(
+        responseObject(fetchUserResponse.error.message, false, null)
+      );
+    }
+
+    if (fetchUserResponse.data.length < 1) {
+      return res.send(responseObject("invalid user", false, null));
+    }
+
+    let expiryDate = new Date(Date.now() + duration * 24 * 60 * 60 * 1000);
+    let role = "paid";
+
+    let payload = { email, planName, expiryDate, role };
+
+    update_plan_model(payload).then((UpdatePlanResponse) => {
+      if (UpdatePlanResponse.error) {
+        return res.send(
+          responseObject(UpdatePlanResponse.error.message, false, null)
+        );
+      }
+
+      return res.send(
+        responseObject("upgraded to premium", true, UpdatePlanResponse.data)
+      );
+    });
+  });
+};
+
+module.exports = {
+  FetchAllPlansFunction,
+  FetchPlansIDFunction,
+  GetPlanFunction,
+};
