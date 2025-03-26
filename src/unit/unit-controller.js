@@ -33,7 +33,7 @@ const FetchUnitsIDFunction = (req, res) => {
 };
 
 const BuyUnitFunction = (req, res) => {
-  let { totalUnit, email } = req.body;
+  let { totalUnits, email } = req.body;
 
   fetch_user_public_model(email).then((fetchUserResponse) => {
     if (fetchUserResponse.error) {
@@ -48,7 +48,7 @@ const BuyUnitFunction = (req, res) => {
 
     let userData = fetchUserResponse.data[0];
     let oldUnit = userData.unit;
-    let newUnit = oldUnit + parseInt(totalUnit);
+    let newUnit = oldUnit + parseInt(totalUnits);
 
     unit_update_public_model(email, newUnit).then((UpdateUnitResponse) => {
       if (UpdateUnitResponse.error) {
