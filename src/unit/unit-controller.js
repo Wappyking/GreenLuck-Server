@@ -1,4 +1,7 @@
-const { unit_update_public_model } = require("../auth/auth-model");
+const {
+  unit_update_public_model,
+  fetch_user_public_model,
+} = require("../auth/auth-model");
 const { responseObject } = require("../utility");
 const { fetch_unit_id_model, fetch_all_units_model } = require("./unit-model");
 
@@ -48,7 +51,7 @@ const BuyUnitFunction = (req, res) => {
 
     let userData = fetchUserResponse.data[0];
     let oldUnit = userData.unit;
-    let newUnit = oldUnit + parseInt(totalUnits);
+    let newUnit = parseInt(oldUnit) + parseInt(totalUnits);
 
     unit_update_public_model(email, newUnit).then((UpdateUnitResponse) => {
       if (UpdateUnitResponse.error) {
