@@ -165,7 +165,7 @@ async function PostPremiumGames(req, res) {
     let bookie = JSON.parse(result_1).data.home.bookie_name;
     let numberOfGames = JSON.parse(result_1).data.home.no_of_entries;
 
-    let games = { games: data };
+    let games = data;
     console.log(games);
 
     fetch_premium_code_model(code).then((fetchCodeResponse) => {
