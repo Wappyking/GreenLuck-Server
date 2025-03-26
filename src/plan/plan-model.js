@@ -11,13 +11,13 @@ function fetch_plans_id_model(payload) {
 function update_plan_model(payload) {
   return supabase
     .from("user_public")
-    .select("*")
     .update({
       role: payload.role,
       planName: payload.planName,
       expiryDate: payload.expiryDate,
     })
-    .eq("email", payload.email);
+    .eq("email", payload.email)
+    .select();
 }
 
 module.exports = {
