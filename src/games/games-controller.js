@@ -19,6 +19,7 @@ const {
   fetch_premium_code_model,
   fetch_free_id_model,
   fetch_premium_id_model,
+  fetch_premium_gamesList_model,
 } = require("./games-model");
 
 async function PostFreeGames(req, res) {
@@ -233,7 +234,7 @@ const FetchPremiumGames = (req, res) => {
 const FetchPremiumGamesList = (req, res) => {
   let { code } = req.body;
 
-  fetch_premium_games_model(code)
+  fetch_premium_gamesList_model(code)
     .then((response3) => {
       if (response3.error) {
         return res.send(responseObject(response3.error.message, false, null));
