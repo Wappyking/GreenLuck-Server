@@ -16,7 +16,7 @@ function update_plan_model(payload) {
       planName: payload.planName,
       expiryDate: payload.expiryDate,
     })
-    .eq("email", payload.email)
+    .eq("email", payload.newEmail)
     .select();
 }
 

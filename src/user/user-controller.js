@@ -93,51 +93,77 @@ const FetchUserFunction = (req, res) => {
 
     let userPublicData1 = userPublicResponse.data[0];
 
-    let currentTime = new Date(Date.now);
+    let currentTime = new Date(Date.now());
     let expiryDate = new Date(userPublicData1.expiryDate);
+
+    console.log(currentTime);
 
     if (currentTime > expiryDate) {
       let role = "free";
       let planName = "free";
       let expiryDate = null;
-      let email = newEmail;
 
-      let payload = { email, expiryDate, planName, role };
+      let payload = { newEmail, expiryDate, planName, role };
       update_plan_model(payload).then((updatePlanResponse) => {
         if (updatePlanResponse.error) {
           return res.send(
             responseObject(updatePlanResponse.error.message, false, null)
           );
         }
+
+        let userPublicData = updatePlanResponse.data[0];
+
+        let uuid = userPublicData.uuid;
+        console.log(uuid);
+
+        getUserByIdPrivate(uuid).then((userPrivateResponse) => {
+          if (userPrivateResponse.error) {
+            return res.send(
+              responseObject(
+                userPrivateResponse.error.message,
+                false,
+                userPublicData
+              )
+            );
+          }
+
+          if (userPrivateResponse.data.length < 1) {
+            return res.send(responseObject("invalid user", false, null));
+          }
+
+          let userPrivateData = userPrivateResponse.data.user;
+
+          let data = { userPublicData, userPrivateData };
+          return res.send(responseObject("userData fetched", true, data));
+        });
+      });
+    } else {
+      let userPublicData = userPublicData1;
+
+      let uuid = userPublicData.uuid;
+      console.log(uuid);
+
+      getUserByIdPrivate(uuid).then((userPrivateResponse) => {
+        if (userPrivateResponse.error) {
+          return res.send(
+            responseObject(
+              userPrivateResponse.error.message,
+              false,
+              userPublicData
+            )
+          );
+        }
+
+        if (userPrivateResponse.data.length < 1) {
+          return res.send(responseObject("invalid user", false, null));
+        }
+
+        let userPrivateData = userPrivateResponse.data.user;
+
+        let data = { userPublicData, userPrivateData };
+        return res.send(responseObject("userData fetched", true, data));
       });
     }
-
-    let userPublicData =
-      currentTime > expiryDate ? updatePlanResponse.data[0] : userPublicData1;
-
-    let uuid = userPublicData.uuid;
-    console.log(uuid);
-
-    getUserByIdPrivate(uuid).then((userPrivateResponse) => {
-      if (userPrivateResponse.error) {
-        return res.send(
-          responseObject(
-            userPrivateResponse.error.message,
-            false,
-            userPublicData
-          )
-        );
-      }
-
-      if (userPrivateResponse.data.length < 1) {
-        return res.send(responseObject("invalid user", false, null));
-      }
-
-      let userPrivateData = userPrivateResponse.data.user;
-
-      let data = { userPublicData, userPrivateData };
-      return res.send(responseObject("userData fetched", true, data));
-    });
   });
 };
 

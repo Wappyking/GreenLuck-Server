@@ -39,6 +39,8 @@ const FetchPlansIDFunction = (req, res) => {
 const GetPlanFunction = (req, res) => {
   let { duration, planName, email } = req.body;
 
+  let newEmail = email.toLowerCase();
+
   fetch_user_public_model(email).then((fetchUserResponse) => {
     if (fetchUserResponse.error) {
       return res.send(
@@ -53,7 +55,7 @@ const GetPlanFunction = (req, res) => {
     let expiryDate = new Date(Date.now() + duration * 24 * 60 * 60 * 1000);
     let role = "paid";
 
-    let payload = { email, planName, expiryDate, role };
+    let payload = { newEmail, planName, expiryDate, role };
 
     update_plan_model(payload).then((UpdatePlanResponse) => {
       if (UpdatePlanResponse.error) {
