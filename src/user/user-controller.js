@@ -95,10 +95,11 @@ const FetchUserFunction = (req, res) => {
 
     let currentTime = new Date(Date.now());
     let expiryDate = new Date(userPublicData1.expiryDate);
+    let role = userPublicData1.role;
 
     console.log(currentTime);
 
-    if (currentTime > expiryDate) {
+    if (currentTime > expiryDate && role == "paid") {
       let role = "free";
       let planName = "free";
       let expiryDate = null;
