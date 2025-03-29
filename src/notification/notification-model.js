@@ -14,8 +14,17 @@ function fetch_notification_id_model(payload) {
 function delete_notification_model(payload) {
   return supabase.from("notification").delete("*").eq("to", payload);
 }
+
+function FCM_update_public_model(email, FCM) {
+  return supabase
+    .from("user_public")
+    .update({ FCM: FCM })
+    .eq("email", email)
+    .select();
+}
 module.exports = {
   fetch_notification_uuid_model,
   fetch_notification_id_model,
   delete_notification_model,
+  FCM_update_public_model,
 };
