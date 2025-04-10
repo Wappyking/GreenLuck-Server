@@ -8,7 +8,7 @@ app.use(cors());
 app.options("*", cors());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/api/v1", require("./routes/index"));
+app.use("/api/v1", cors(), require("./routes/index"));
 // app.get("/", (req, res) => {
 //     res.send(req.body);
 //   });
