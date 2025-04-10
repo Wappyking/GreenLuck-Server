@@ -5,6 +5,8 @@ const cors = require("cors");
 const app = express();
 const port = 3000;
 app.use(express.json());
+app.use(cors(corsOptions));
+app.use(express.urlencoded({ extended: true }));
 
 const allowedOrigins = [
   "http://localhost:3001",
@@ -30,7 +32,6 @@ const corsOptions = {
   preflightContinue: false, // Pass the OPTIONS request to the next handler (rarely needed)
   maxAge: 3600, // Cache preflight response for 1 hour
 };
-app.use(cors(corsOptions));
 
 app.use("/api/v1", require("./routes/index"));
 // app.get("/", (req, res) => {
