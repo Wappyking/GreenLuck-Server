@@ -7,7 +7,7 @@ const port = 3000;
 // app.use(express.json());
 
 const allowedOrigins = [
-  "http://localhost.com",
+  "http://localhost.com:3000",
   "https://greenlucktips.com",
   "https://192.168.1.122:3000",
 ];
