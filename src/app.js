@@ -4,7 +4,7 @@ const cors = require("cors");
 // const nodemailer = require("nodemailer");
 const app = express();
 const port = 3000;
-app.use(express.json());
+// app.use(express.json());
 
 const allowedOrigins = ["https://localhost.com", "https://greenlucktips.com"];
 
