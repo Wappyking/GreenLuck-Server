@@ -102,6 +102,13 @@ async function SignUpOTP(req, res) {
 }
 
 const LoginFunction = (req, res) => {
+  // Handle preflight request
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000"); // Or '*' for any origin (not recommended for production)
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS"); // Add other allowed methods if needed
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization"); // Add other allowed headers if needed
+  res.setHeader("Access-Control-Allow-Credentials", "true"); // If you need credentials (cookies, HTTP authentication)
+  res.status(204).send(); // Send a 204 No Content response for successful preflight
+
   let { email, password } = req.body;
 
   let newEmail = email.toLowerCase();
