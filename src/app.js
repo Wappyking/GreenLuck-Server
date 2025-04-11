@@ -4,74 +4,15 @@ const cors = require("cors");
 const app = express();
 const port = 3000;
 app.use(express.json());
-
-// app.use(express.urlencoded({ extended: true }));
-
-// Define allowed origins
-// const allowedOrigins = [
-//   "https://greenlucktips.com",
-//   "https://www.greenlucktips.com",
-//   "http://localhost:3000",
-//   "http://localhost:3001",
-//   "http://192.168.1.122:3000",
-//   "http://192.168.1.122:3001",
-// ];
-
-// const corsOptions = {
-//   origin: function (origin, callback) {
-//     // Allow requests with no origin (like mobile apps or curl requests)
-//     if (!origin) return callback(null, true);
-
-//     if (allowedOrigins.indexOf(origin) === -1) {
-//       console.warn(`CORS: Blocked origin ${origin}`); // Log blocked origins
-//       const msg =
-//         "The CORS policy for this site does not allow access from the specified Origin.";
-//       return callback(new Error(msg), false);
-//     }
-//     return callback(null, true); // Allow the origin
-//   },
-//   methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Allowed methods
-//   allowedHeaders: "Origin,X-Requested-With,Content-Type,Accept,Authorization", // Allowed headers
-//   credentials: true, // Allow cookies/auth headers
-//   optionsSuccessStatus: 204, // Respond with 204 for preflight requests
-//   maxAge: 86400, // Cache preflight for 1 day (in seconds)
-// };
-
-// Apply CORS middleware globally or to specific routes
 app.use(cors());
 
-// Optionally enable pre-flight across-the-board
-// Useful if you have complex routing and want OPTIONS handled early
-// app.options("*", cors(corsOptions));
-
-app.use((req, res, next) => {
-  const allowedOrigins = [
-    "https://greenlucktips.com",
-    "https://www.greenlucktips.com",
-    "http://localhost:3000",
-    "http://localhost:3001",
-    "http://192.168.1.122:3000",
-    "http://192.168.1.122:3001",
-  ];
-  const origin = req.headers.origin;
-
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-  }
-
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "DELETE, PUT, GET, POST");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
   );
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.setHeader("Access-Control-Allow-Credentials", true);
-
-  // Handle Preflight Request
-  if (req.method === "OPTIONS") {
-    // Preflight requests should not reach your route handlers
-    return res.sendStatus(204); // Respond with 204 No Content
-  }
-
   next();
 });
 
