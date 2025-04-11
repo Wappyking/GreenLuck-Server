@@ -44,7 +44,38 @@ app.use(cors(corsOptions));
 // Useful if you have complex routing and want OPTIONS handled early
 app.options("*", cors(corsOptions));
 
-app.use("/api/v1", cors(), require("./routes/index"));
+app.use((req, res, next) => {
+  const allowedOrigins = [
+    "https://greenlucktips.com",
+    "https://www.greenlucktips.com",
+    "http://localhost:3000",
+    "http://localhost:3001",
+    "http://192.168.1.122:3000",
+    "http://192.168.1.122:3001",
+  ];
+  const origin = req.headers.origin;
+
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, PATCH, DELETE, OPTIONS"
+  );
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader("Access-Control-Allow-Credentials", true);
+
+  // Handle Preflight Request
+  if (req.method === "OPTIONS") {
+    // Preflight requests should not reach your route handlers
+    return res.sendStatus(204); // Respond with 204 No Content
+  }
+
+  next();
+});
+
+app.use("/api/v1", require("./routes/index"));
 // app.get("/", (req, res) => {
 //     res.send(req.body);
 //   });
