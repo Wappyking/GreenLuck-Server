@@ -6,27 +6,11 @@ const port = 3000;
 app.use(express.json());
 // app.use(cors());
 
-// enable cors
-app.use(
-  cors({
-    origin: true,
-    optionsSuccessStatus: 200,
-    credentials: true,
-  })
-);
-app.options(
-  "*",
-  cors({
-    origin: true,
-    optionsSuccessStatus: 200,
-    credentials: true,
-  })
-);
-
 app.use((req, res, next) => {
   const allowedOrigins = [
     "https://your-frontend-app.com",
     "http://localhost:3000",
+    "http://192.168.1.122:3000",
   ];
   const origin = req.headers.origin;
 
