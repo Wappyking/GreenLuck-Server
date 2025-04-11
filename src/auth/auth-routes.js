@@ -1,5 +1,4 @@
 const { Router } = require("express");
-var cors = require("cors");
 const {
   LoginFunction,
 
@@ -16,7 +15,7 @@ const routes = Router();
 routes.post("/request-otp", RequestOtp);
 routes.post("/signUp-otp", SignUpOTP);
 routes.post("/signup", SignupFunction);
-routes.post("/login", cors(), LoginFunction);
+routes.post("/login", LoginFunction);
 routes.post("/reset-password", ResetPasswordFunction);
 routes.post("/update-password", UpdatePasswordFunction);
 routes.post("/change-password", ChangePasswordFunction);

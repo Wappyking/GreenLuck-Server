@@ -9,7 +9,7 @@ const port = 3000;
 
 app.use(cors());
 
-app.use("/api/v1", require("./routes/index"));
+app.use("/api/v1", cors(), require("./routes/index"));
 // app.get("/", (req, res) => {
 //     res.send(req.body);
 //   });
