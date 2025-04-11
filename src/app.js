@@ -32,7 +32,7 @@ app.use(function (req, res, next) {
 
   // intercept OPTIONS method
   if (oneof && req.method == "OPTIONS") {
-    res.status(200);
+    res.sendStatus(204);
   } else {
     next();
   }
