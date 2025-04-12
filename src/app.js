@@ -40,6 +40,7 @@ app.use(
     origin: "http://localhost:3000",
     methods: ["GET", "POST"],
     preflightContinue: true,
+    optionsSuccessStatus: 200,
   })
 );
 
