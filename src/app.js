@@ -9,7 +9,7 @@ app.use(express.json());
 const allowedOrigins = [
   "https://greenlucktips.com",
   "https://www.greenlucktips.com",
-  "http://localhost:3001",
+  "http://localhost:3000",
   "http://192.168.1.122:3000",
 ];
 
@@ -22,7 +22,8 @@ const corsOptions = {
       console.warn(`CORS: Blocked origin ${origin}`); // Log blocked origins
       const msg =
         "The CORS policy for this site does not allow access from the specified Origin.";
-      return callback(new Error(msg), false);
+      // return callback(new Error(msg), false);
+      return callback(null, true); // Allow the origin
     }
     return callback(null, true); // Allow the origin
   },
