@@ -4,7 +4,7 @@ const app = express();
 const bodyParser = require("body-parser");
 
 // port
-let port = 1313;
+let port = 3000;
 
 // this package helps us recieve data from users in json format durring post method
 app.use(bodyParser.json()); //application json
