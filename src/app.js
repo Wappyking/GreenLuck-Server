@@ -12,7 +12,7 @@ app.use(bodyParser.json()); //application json
 // for post requests
 app.use(express.json());
 
-app.use(cors());
+// app.use(cors());
 
 // this middleware allows CORS (cross origin resource sharing)
 // which means api can be shared between different servers running
