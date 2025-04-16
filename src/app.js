@@ -4,10 +4,11 @@ const app = express();
 const bodyParser = require("body-parser");
 
 // port
-let port = 3000;
+let port = 3323;
 
 // this package helps us recieve data from users in json format durring post method
-app.use(bodyParser.json()); //application json
+// app.use(bodyParser.json());
+//application json
 
 // for post requests
 app.use(express.json());
@@ -25,9 +26,9 @@ app.use((req, res, next) => {
 });
 
 app.use("/api/v1", require("./routes/index"));
-// app.get("/", (req, res) => {
-//     res.send(req.body);
-//   });
+app.get("/", (req, res) => {
+  res.send("We are good");
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
