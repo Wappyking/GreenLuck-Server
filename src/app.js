@@ -42,8 +42,10 @@ app.use((req, res, next) => {
 // Routes
 // app.use("/API/V1", require("./"))
 // app.use("/APP", require("./APP/routes/index"))
+app.use("/api/v1", require("./routes/index"));
+
 app.use("/", (req, res) => {
-  res.send("Welcome to pocket voucher server");
+  res.send("Welcome to Green Luck server");
 });
 
 server.listen(process.env.PORT || 9090, () => {
