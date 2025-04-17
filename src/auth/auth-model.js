@@ -11,6 +11,9 @@ function SignUp_public_model(payload) {
         password: payload.password,
         unit: 0,
         role: "free",
+        phone: payload.phone,
+        country: payload.country,
+        countryFlag: payload.countryFlag,
       },
     ])
     .select();

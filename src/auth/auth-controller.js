@@ -149,7 +149,7 @@ const LoginFunction = (req, res) => {
 };
 
 async function SignupFunction(req, res) {
-  let { userName, email, phone, password } = req.body;
+  let { userName, email, phone, password, country, countryFlag } = req.body;
 
   let newEmail = email.toLowerCase();
 
@@ -176,7 +176,15 @@ async function SignupFunction(req, res) {
 
         let uuid = SignUpPrivateResponse.data.user.id;
 
-        let payload = { userName, newEmail, uuid, password };
+        let payload = {
+          userName,
+          newEmail,
+          uuid,
+          password,
+          phone,
+          country,
+          countryFlag,
+        };
 
         SignUp_public_model(payload)
           .then((SignUpPublicResponse) => {
