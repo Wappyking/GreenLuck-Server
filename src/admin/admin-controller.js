@@ -13,9 +13,11 @@ const FetchAllUsersFunction = async (req, res) => {
     }
 
     return res.send(
-      responseObject("Users fetched successfully", true, {
-        users: fetchUsersResponse.data,
-      })
+      responseObject(
+        "Users fetched successfully",
+        true,
+        fetchUsersResponse.data
+      )
     );
   });
 };
@@ -29,9 +31,11 @@ const FetchPremiumUsersFunction = async (req, res) => {
     }
 
     return res.send(
-      responseObject("Users fetched successfully", true, {
-        PremiumUsers: fetchUsersResponse.data,
-      })
+      responseObject(
+        "Users fetched successfully",
+        true,
+        fetchUsersResponse.data
+      )
     );
   });
 };
