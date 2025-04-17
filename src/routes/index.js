@@ -8,5 +8,6 @@ routes.use("/plan", require("../plan/plan-routes"));
 routes.use("/unit", require("../unit/unit-routes"));
 routes.use("/convert", require("../convert/convert-routes"));
 routes.use("/slider", require("../slider/slider-routes"));
+routes.use("/admin", require("../admin/admin-routes"));
 
 module.exports = routes;
